@@ -1,10 +1,16 @@
 import ProductCard from "./ProductCard";
-import productShowcase from "@/assets/product-showcase.jpg";
+import { Link } from "react-router-dom";
+import leatherBag from "@/assets/leather-bag.jpg";
+import cottonSweater from "@/assets/cotton-sweater.jpg";
+import plantStand from "@/assets/plant-stand.jpg";
+import ceramicMugs from "@/assets/ceramic-mugs.jpg";
+import bambooOrganizer from "@/assets/bamboo-organizer.jpg";
+import denimJacket from "@/assets/denim-jacket.jpg";
 
-// Mock data for demonstration
+// Mock data with proper Indian marketplace items
 const mockProducts = [
   {
-    image: productShowcase,
+    image: leatherBag,
     title: "Vintage Leather Crossbody Bag - Perfect for Daily Use",
     price: 3500,
     originalPrice: 9500,
@@ -15,7 +21,7 @@ const mockProducts = [
     isLiked: true,
   },
   {
-    image: productShowcase,
+    image: cottonSweater,
     title: "Organic Cotton Oversized Sweater",
     price: 2200,
     originalPrice: 6800,
@@ -25,7 +31,7 @@ const mockProducts = [
     ecoScore: 8,
   },
   {
-    image: productShowcase,
+    image: plantStand,
     title: "Mid-Century Modern Plant Stand",
     price: 2800,
     originalPrice: 7500,
@@ -35,7 +41,7 @@ const mockProducts = [
     ecoScore: 7,
   },
   {
-    image: productShowcase,
+    image: ceramicMugs,
     title: "Handmade Ceramic Coffee Mug Set",
     price: 1800,
     originalPrice: 4800,
@@ -46,7 +52,7 @@ const mockProducts = [
     isLiked: true,
   },
   {
-    image: productShowcase,
+    image: bambooOrganizer,
     title: "Sustainable Bamboo Desk Organizer",
     price: 1400,
     originalPrice: 3600,
@@ -56,7 +62,7 @@ const mockProducts = [
     ecoScore: 10,
   },
   {
-    image: productShowcase,
+    image: denimJacket,
     title: "Vintage Denim Jacket - Size Medium",
     price: 2500,
     originalPrice: 7200,
@@ -90,9 +96,12 @@ const ProductGrid = () => {
         </div>
 
         <div className="text-center mt-12">
-          <div id="products" className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block">
+          <Link 
+            to="/browse"
+            className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block"
+          >
             View All Items
-          </div>
+          </Link>
         </div>
       </div>
     </section>

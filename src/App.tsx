@@ -10,6 +10,8 @@ import Cart from "./pages/Cart";
 import AddProduct from "./pages/AddProduct";
 import MyListings from "./pages/MyListings";
 import ProductDetail from "./pages/ProductDetail";
+import CategoryProducts from "./pages/CategoryProducts";
+import BrowseProducts from "./pages/BrowseProducts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/add-product" element={<AddProduct />} />
           <Route path="/my-listings" element={<MyListings />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/category/:category" element={<CategoryProducts />} />
+          <Route path="/browse" element={<BrowseProducts />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

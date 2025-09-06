@@ -1,4 +1,5 @@
 import { Shirt, Home, Book, Gamepad2, Palette, Baby } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const categories = [
   { name: "Fashion", icon: Shirt, count: "2.4k items", color: "text-accent" },
@@ -24,9 +25,10 @@ const Categories = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {categories.map((category, index) => (
-            <div
+            <Link
               key={index}
-              className="group cursor-pointer p-6 rounded-xl bg-background border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+              to={`/category/${category.name.toLowerCase().replace(/\s+&\s+/g, '-').replace(/\s+/g, '-')}`}
+              className="group cursor-pointer p-6 rounded-xl bg-background border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 block"
             >
               <div className="text-center">
                 <div className={`w-12 h-12 mx-auto mb-4 rounded-full bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors ${category.color}`}>
@@ -37,7 +39,7 @@ const Categories = () => {
                 </h3>
                 <p className="text-sm text-muted-foreground">{category.count}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

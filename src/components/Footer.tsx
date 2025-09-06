@@ -1,5 +1,6 @@
 import { Leaf, Facebook, Twitter, Instagram, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -18,18 +19,26 @@ const Footer = () => {
               Making sustainable shopping accessible to everyone. Join our community of conscious consumers and help create a more sustainable future.
             </p>
             <div className="flex space-x-2">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                <Facebook className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                <Twitter className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                <Instagram className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                <Mail className="w-4 h-4" />
-              </Button>
+              <a href="https://facebook.com/ecofinds" target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                  <Facebook className="w-4 h-4" />
+                </Button>
+              </a>
+              <a href="https://twitter.com/ecofinds" target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                  <Twitter className="w-4 h-4" />
+                </Button>
+              </a>
+              <a href="https://instagram.com/ecofinds" target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                  <Instagram className="w-4 h-4" />
+                </Button>
+              </a>
+              <a href="mailto:hello@ecofinds.in">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                  <Mail className="w-4 h-4" />
+                </Button>
+              </a>
             </div>
           </div>
 
@@ -37,10 +46,10 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-foreground mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Browse Items</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Sell Items</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">How It Works</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Safety Tips</a></li>
+              <li><Link to="/browse" className="text-muted-foreground hover:text-primary transition-colors">Browse Items</Link></li>
+              <li><Link to="/add-product" className="text-muted-foreground hover:text-primary transition-colors">Sell Items</Link></li>
+              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
+              <li><Link to="/safety" className="text-muted-foreground hover:text-primary transition-colors">Safety Tips</Link></li>
             </ul>
           </div>
 
@@ -48,10 +57,10 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-foreground mb-4">Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Help Center</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</a></li>
+              <li><Link to="/help" className="text-muted-foreground hover:text-primary transition-colors">Help Center</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</Link></li>
+              <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
