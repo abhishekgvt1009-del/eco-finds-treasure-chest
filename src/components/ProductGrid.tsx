@@ -1,10 +1,35 @@
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { Link } from "react-router-dom";
-import { products } from "@/data/products";
+import { fetchProducts } from "@/data/products";
+import type { Product } from "@/types/product";
 
 const ProductGrid = () => {
-  // Show first 6 products on homepage
-  const featuredProducts = products.slice(0, 6);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      const fetchedProducts = await fetchProducts();
+      setProducts(fetchedProducts.slice(0, 8));
+      setLoading(false);
+    };
+
+    loadProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-lg p-4 animate-pulse">
+            <div className="bg-muted h-48 rounded-lg mb-4"></div>
+            <div className="bg-muted h-4 rounded mb-2"></div>
+            <div className="bg-muted h-6 rounded"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <section className="py-16 bg-gradient-to-b from-background to-secondary/30">
@@ -19,21 +44,9 @@ const ProductGrid = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {featuredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              {...product}
-            />
+          {products.map((product) => (
+            <ProductCard key={product.id} {...product} />
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <Link 
-            to="/browse"
-            className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block"
-          >
-            View All Items
-          </Link>
         </div>
       </div>
     </section>
