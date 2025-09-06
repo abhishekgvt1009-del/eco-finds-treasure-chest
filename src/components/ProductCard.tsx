@@ -1,6 +1,7 @@
 import { Heart, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 interface ProductCardProps {
   image: string;
@@ -28,7 +29,7 @@ const ProductCard = ({
   const savings = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
   return (
-    <div className="group relative bg-card rounded-lg border border-border hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <Link to={`/product/1`} className="group relative bg-card rounded-lg border border-border hover:shadow-lg transition-all duration-300 overflow-hidden block">
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden">
         <img 
@@ -98,7 +99,7 @@ const ProductCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

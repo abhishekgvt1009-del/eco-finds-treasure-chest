@@ -90,9 +90,9 @@ const ProductGrid = () => {
         </div>
 
         <div className="text-center mt-12">
-          <button className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
+          <div id="products" className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium inline-block">
             View All Items
-          </button>
+          </div>
         </div>
       </div>
     </section>

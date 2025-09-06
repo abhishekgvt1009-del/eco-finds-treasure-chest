@@ -1,5 +1,6 @@
 import { ArrowRight, Recycle, Users, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Hero = () => {
@@ -33,13 +34,17 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">
-              Start Shopping
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-            <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/5">
-              Sell Your Items
-            </Button>
+            <Link to="/#products">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">
+                Start Shopping
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+            <Link to="/add-product">
+              <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/5">
+                Sell Your Items
+              </Button>
+            </Link>
           </div>
 
           {/* Trust indicators */}
