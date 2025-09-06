@@ -2,34 +2,27 @@ import { Heart, MapPin, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useWishlist } from "@/context/WishlistContext";
 
 interface ProductCardProps {
+  id: string;
   image: string;
   title: string;
   price: number;
   originalPrice?: number;
   location: string;
   rating: number;
-  isLiked?: boolean;
   condition: "Excellent" | "Very Good" | "Good" | "Fair";
   ecoScore?: number;
 }
 
-const ProductCard = ({ 
-  image, 
-  title, 
-  price, 
-  originalPrice, 
-  location, 
-  rating, 
-  isLiked = false, 
-  condition,
-  ecoScore 
-}: ProductCardProps) => {
+const ProductCard = ({ id, image, title, price, originalPrice, location, rating, condition, ecoScore }: ProductCardProps) => {
   const savings = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
+  const { toggle, isWishlisted } = useWishlist();
+  const liked = isWishlisted(id);
 
   return (
-    <Link to={`/product/1`} className="group relative bg-card rounded-lg border border-border hover:shadow-lg transition-all duration-300 overflow-hidden block">
+    <Link to={`/product/${id}`} className="group relative bg-card rounded-lg border border-border hover:shadow-lg transition-all duration-300 overflow-hidden block">
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden">
         <img 
@@ -56,13 +49,14 @@ const ProductCard = ({
         <Button
           variant="ghost"
           size="icon"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(id); }}
           className={`absolute top-3 right-3 w-8 h-8 rounded-full backdrop-blur-sm ${
-            isLiked 
+            liked 
               ? 'bg-accent text-accent-foreground' 
               : 'bg-background/80 text-muted-foreground hover:text-accent'
           }`}
         >
-          <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
+          <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
         </Button>
       </div>
 
