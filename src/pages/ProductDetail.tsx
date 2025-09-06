@@ -35,10 +35,10 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Loading...</h1>
+        <div className="flex items-center justify-center h-[80vh]">
+          <h1 className="text-2xl font-bold">Loading...</h1>
         </div>
       </div>
     );
@@ -50,19 +50,27 @@ const ProductDetail = () => {
         <Navbar />
         <div className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold mb-2">Product Not Found</h1>
-          <p className="text-muted-foreground mb-6">The item you are looking for may have been removed.</p>
-          <Link to="/browse"><Button>Browse Items</Button></Link>
+          <p className="text-muted-foreground mb-6">
+            The item you are looking for may have been removed.
+          </p>
+          <Link to="/browse">
+            <Button>Browse Items</Button>
+          </Link>
         </div>
       </div>
     );
   }
 
-  const images = product.images ?? [product.image];
+  const images = product.images?.length ? product.images : [product.image];
   const savings = product.originalPrice ? product.originalPrice - product.price : 0;
-  const savingsPercent = product.originalPrice ? Math.round((savings / product.originalPrice) * 100) : 0;
+  const savingsPercent = product.originalPrice
+    ? Math.round((savings / product.originalPrice) * 100)
+    : 0;
   const liked = isWishlisted(product.id);
 
-  const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const relatedProducts = products
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -73,7 +81,9 @@ const ProductDetail = () => {
         await navigator.clipboard.writeText(url);
         alert("Link copied to clipboard");
       }
-    } catch {}
+    } catch {
+      console.warn("Share failed");
+    }
   };
 
   const buyNow = () => {
@@ -84,11 +94,11 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
-        <Link 
-          to="/browse" 
+        <Link
+          to="/browse"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -99,8 +109,8 @@ const ProductDetail = () => {
           {/* Images */}
           <div className="space-y-4">
             <div className="aspect-square rounded-lg overflow-hidden">
-              <img 
-                src={images[currentImage]} 
+              <img
+                src={images[currentImage]}
                 alt={product.title}
                 className="w-full h-full object-cover"
               />
@@ -112,7 +122,7 @@ const ProductDetail = () => {
                     key={index}
                     onClick={() => setCurrentImage(index)}
                     className={`w-20 h-20 rounded-md overflow-hidden border-2 transition-colors ${
-                      currentImage === index ? 'border-primary' : 'border-border'
+                      currentImage === index ? "border-primary" : "border-border"
                     }`}
                   >
                     <img src={image} alt="" className="w-full h-full object-cover" />
@@ -130,19 +140,21 @@ const ProductDetail = () => {
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {product.title}
                   </h1>
-                  <div className="flex items-center gap-2 mb-3">
-                    <MapPin className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">{product.location}</span>
-                  </div>
+                  {product.location && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">{product.location}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() => toggle(product.id)}
-                    className={liked ? 'text-red-500 border-red-200' : ''}
+                    className={liked ? "text-red-500 border-red-200" : ""}
                   >
-                    <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
+                    <Heart className={`w-4 h-4 ${liked ? "fill-current" : ""}`} />
                   </Button>
                   <Button variant="outline" size="icon" onClick={handleShare}>
                     <Share2 className="w-4 h-4" />
@@ -151,14 +163,14 @@ const ProductDetail = () => {
               </div>
 
               <div className="flex items-center gap-3 mb-6">
-                <Badge variant="outline">{product.condition}</Badge>
+                {product.condition && <Badge variant="outline">{product.condition}</Badge>}
                 {product.ecoScore && (
-                  <Badge variant="secondary" className="bg-success/10 text-success">
+                  <Badge variant="secondary" className="bg-green-100 text-green-600">
                     🌱 Eco {product.ecoScore}/10
                   </Badge>
                 )}
                 {savingsPercent > 0 && (
-                  <Badge variant="secondary" className="bg-accent/10 text-accent">
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-600">
                     {savingsPercent}% off
                   </Badge>
                 )}
@@ -166,7 +178,9 @@ const ProductDetail = () => {
 
               <div className="mb-6">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-3xl font-bold text-foreground">₹{product.price}</span>
+                  <span className="text-3xl font-bold text-foreground">
+                    ₹{product.price}
+                  </span>
                   {product.originalPrice && (
                     <span className="text-xl text-muted-foreground line-through">
                       ₹{product.originalPrice}
@@ -174,7 +188,7 @@ const ProductDetail = () => {
                   )}
                 </div>
                 {savings > 0 && (
-                  <p className="text-success font-medium">You save ₹{savings}!</p>
+                  <p className="text-green-600 font-medium">You save ₹{savings}!</p>
                 )}
               </div>
             </div>
@@ -196,10 +210,19 @@ const ProductDetail = () => {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Message {product.seller}</DialogTitle>
+                    <DialogTitle>Message {product.seller ?? "Seller"}</DialogTitle>
                   </DialogHeader>
-                  <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); alert('Message sent to seller'); }}>
-                    <textarea className="w-full min-h-[120px] rounded-md border border-border bg-background p-3" placeholder="Hi! Is this still available? Can you share more photos?" />
+                  <form
+                    className="space-y-3"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      alert("Message sent to seller");
+                    }}
+                  >
+                    <textarea
+                      className="w-full min-h-[120px] rounded-md border border-border bg-background p-3"
+                      placeholder="Hi! Is this still available? Can you share more photos?"
+                    />
                     <Button type="submit">Send Message</Button>
                   </form>
                 </DialogContent>
@@ -211,19 +234,19 @@ const ProductDetail = () => {
               <CardContent className="p-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-trust" />
+                    <Shield className="w-4 h-4 text-blue-500" />
                     <span>Buyer Protection</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Truck className="w-4 h-4 text-primary" />
+                    <Truck className="w-4 h-4 text-indigo-500" />
                     <span>Ships across India</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <RotateCcw className="w-4 h-4 text-success" />
+                    <RotateCcw className="w-4 h-4 text-green-600" />
                     <span>7-day returns</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-yellow-400" />
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
                     <span>Quality Verified</span>
                   </div>
                 </div>
@@ -239,18 +262,24 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar>
                     <AvatarImage src={"/api/placeholder/150/150"} />
-                    <AvatarFallback>{product.seller.slice(0,2).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback>
+                      {product.seller?.slice(0, 2).toUpperCase() ?? "NA"}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <h3 className="font-medium">{product.seller}</h3>
-                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                      <Star className="w-3 h-3 fill-current text-yellow-400" />
-                      <span>{product.rating} • Trusted Seller</span>
-                    </div>
+                    {product.rating && (
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Star className="w-3 h-3 fill-current text-yellow-400" />
+                        <span>{product.rating} • Trusted Seller</span>
+                      </div>
+                    )}
                   </div>
-                  <Link to={`/seller/${product.seller}`}>
-                    <Button variant="outline" size="sm">View Profile</Button>
-                  </Link>
+                  {product.seller && (
+                    <Link to={`/seller/${product.seller}`}>
+                      <Button variant="outline" size="sm">View Profile</Button>
+                    </Link>
+                  )}
                 </div>
                 <div className="text-sm text-muted-foreground space-y-1">
                   <p>Joined recently</p>
@@ -270,7 +299,7 @@ const ProductDetail = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed">
-                  {product.description}
+                  {product.description ?? "No description available."}
                 </p>
               </CardContent>
             </Card>
@@ -310,13 +339,15 @@ const ProductDetail = () => {
                 {relatedProducts.map((item) => (
                   <Link key={item.id} to={`/product/${item.id}`}>
                     <div className="flex gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                      <img 
-                        src={item.image} 
+                      <img
+                        src={item.image}
                         alt={item.title}
                         className="w-16 h-16 object-cover rounded-md"
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm line-clamp-2">{item.title}</h4>
+                        <h4 className="font-medium text-sm line-clamp-2">
+                          {item.title}
+                        </h4>
                         <div className="flex items-center gap-2 mt-1">
                           <span className="font-bold text-sm">₹{item.price}</span>
                           {item.originalPrice && (
