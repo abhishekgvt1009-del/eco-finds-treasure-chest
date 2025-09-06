@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ArrowLeft, Heart, Share2, MessageCircle, MapPin, Star, Shield, Truck, RotateCcw } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { getProductById, products } from "@/data/products";
+import type { Product } from "@/types/product";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 
@@ -19,7 +20,30 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const [currentImage, setCurrentImage] = useState(0);
 
-  const product = useMemo(() => (id ? getProductById(id) : undefined), [id]);
+  const [product, setProduct] = useState<Product | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      getProductById(id).then((prod) => {
+        setProduct(prod);
+        setLoading(false);
+      });
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Navbar />
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="min-h-screen bg-background">
