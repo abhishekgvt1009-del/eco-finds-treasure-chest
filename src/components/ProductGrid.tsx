@@ -1,79 +1,11 @@
 import ProductCard from "./ProductCard";
 import { Link } from "react-router-dom";
-import leatherBag from "@/assets/leather-bag.jpg";
-import cottonSweater from "@/assets/cotton-sweater.jpg";
-import plantStand from "@/assets/plant-stand.jpg";
-import ceramicMugs from "@/assets/ceramic-mugs.jpg";
-import bambooOrganizer from "@/assets/bamboo-organizer.jpg";
-import denimJacket from "@/assets/denim-jacket.jpg";
-
-// Mock data with proper Indian marketplace items
-const mockProducts = [
-  {
-    image: leatherBag,
-    title: "Vintage Leather Crossbody Bag - Perfect for Daily Use",
-    price: 3500,
-    originalPrice: 9500,
-    location: "Mumbai, Maharashtra",
-    rating: 4.8,
-    condition: "Excellent" as const,
-    ecoScore: 9,
-    isLiked: true,
-  },
-  {
-    image: cottonSweater,
-    title: "Organic Cotton Oversized Sweater",
-    price: 2200,
-    originalPrice: 6800,
-    location: "Bangalore, Karnataka",
-    rating: 4.6,
-    condition: "Very Good" as const,
-    ecoScore: 8,
-  },
-  {
-    image: plantStand,
-    title: "Mid-Century Modern Plant Stand",
-    price: 2800,
-    originalPrice: 7500,
-    location: "Pune, Maharashtra",
-    rating: 4.9,
-    condition: "Good" as const,
-    ecoScore: 7,
-  },
-  {
-    image: ceramicMugs,
-    title: "Handmade Ceramic Coffee Mug Set",
-    price: 1800,
-    originalPrice: 4800,
-    location: "Delhi, NCR",
-    rating: 4.7,
-    condition: "Excellent" as const,
-    ecoScore: 9,
-    isLiked: true,
-  },
-  {
-    image: bambooOrganizer,
-    title: "Sustainable Bamboo Desk Organizer",
-    price: 1400,
-    originalPrice: 3600,
-    location: "Chennai, Tamil Nadu",
-    rating: 4.5,
-    condition: "Very Good" as const,
-    ecoScore: 10,
-  },
-  {
-    image: denimJacket,
-    title: "Vintage Denim Jacket - Size Medium",
-    price: 2500,
-    originalPrice: 7200,
-    location: "Hyderabad, Telangana",
-    rating: 4.8,
-    condition: "Good" as const,
-    ecoScore: 8,
-  },
-];
+import { products } from "@/data/products";
 
 const ProductGrid = () => {
+  // Show first 6 products on homepage
+  const featuredProducts = products.slice(0, 6);
+
   return (
     <section className="py-16 bg-gradient-to-b from-background to-secondary/30">
       <div className="container mx-auto px-4">
@@ -87,9 +19,9 @@ const ProductGrid = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {mockProducts.map((product, index) => (
+          {featuredProducts.map((product) => (
             <ProductCard
-              key={index}
+              key={product.id}
               {...product}
             />
           ))}

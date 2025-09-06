@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, Filter, SortAsc, Grid3X3, List } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Search, SortAsc, Grid3X3, List } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -7,94 +7,37 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import leatherBag from "@/assets/leather-bag.jpg";
-import cottonSweater from "@/assets/cotton-sweater.jpg";
-import plantStand from "@/assets/plant-stand.jpg";
-import ceramicMugs from "@/assets/ceramic-mugs.jpg";
-import bambooOrganizer from "@/assets/bamboo-organizer.jpg";
-import denimJacket from "@/assets/denim-jacket.jpg";
-
-const allProducts = [
-  {
-    image: leatherBag,
-    title: "Vintage Leather Crossbody Bag - Perfect for Daily Use",
-    price: 3500,
-    originalPrice: 9500,
-    location: "Mumbai, Maharashtra",
-    rating: 4.8,
-    condition: "Excellent" as const,
-    ecoScore: 9,
-    isLiked: true,
-    category: "Fashion",
-  },
-  {
-    image: cottonSweater,
-    title: "Organic Cotton Oversized Sweater",
-    price: 2200,
-    originalPrice: 6800,
-    location: "Bangalore, Karnataka",
-    rating: 4.6,
-    condition: "Very Good" as const,
-    ecoScore: 8,
-    category: "Fashion",
-  },
-  {
-    image: plantStand,
-    title: "Mid-Century Modern Plant Stand",
-    price: 2800,
-    originalPrice: 7500,
-    location: "Pune, Maharashtra",
-    rating: 4.9,
-    condition: "Good" as const,
-    ecoScore: 7,
-    category: "Home & Garden",
-  },
-  {
-    image: ceramicMugs,
-    title: "Handmade Ceramic Coffee Mug Set",
-    price: 1800,
-    originalPrice: 4800,
-    location: "Delhi, NCR",
-    rating: 4.7,
-    condition: "Excellent" as const,
-    ecoScore: 9,
-    isLiked: true,
-    category: "Home & Garden",
-  },
-  {
-    image: bambooOrganizer,
-    title: "Sustainable Bamboo Desk Organizer",
-    price: 1400,
-    originalPrice: 3600,
-    location: "Chennai, Tamil Nadu",
-    rating: 4.5,
-    condition: "Very Good" as const,
-    ecoScore: 10,
-    category: "Electronics",
-  },
-  {
-    image: denimJacket,
-    title: "Vintage Denim Jacket - Size Medium",
-    price: 2500,
-    originalPrice: 7200,
-    location: "Hyderabad, Telangana",
-    rating: 4.8,
-    condition: "Good" as const,
-    ecoScore: 8,
-    category: "Fashion",
-  },
-];
+import { useLocation } from "react-router-dom";
+import { products as allProducts } from "@/data/products";
 
 const BrowseProducts = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const initialQuery = params.get("query") || "";
+  const [searchTerm, setSearchTerm] = useState(initialQuery);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sort, setSort] = useState("relevance");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const filteredProducts = allProducts.filter(product => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || product.category.toLowerCase() === selectedCategory.toLowerCase();
-    return matchesSearch && matchesCategory;
-  });
+  const filteredProducts = useMemo(() => {
+    const list = allProducts.filter(product => {
+      const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+    switch (sort) {
+      case "price-low":
+        return [...list].sort((a,b) => a.price - b.price);
+      case "price-high":
+        return [...list].sort((a,b) => b.price - a.price);
+      case "rating":
+        return [...list].sort((a,b) => b.rating - a.rating);
+      case "eco-score":
+        return [...list].sort((a,b) => (b.ecoScore || 0) - (a.ecoScore || 0));
+      default:
+        return list;
+    }
+  }, [searchTerm, selectedCategory, sort]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -131,16 +74,16 @@ const BrowseProducts = () => {
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="fashion">Fashion</SelectItem>
-                <SelectItem value="home & garden">Home & Garden</SelectItem>
+                <SelectItem value="home-garden">Home & Garden</SelectItem>
                 <SelectItem value="electronics">Electronics</SelectItem>
-                <SelectItem value="books & media">Books & Media</SelectItem>
-                <SelectItem value="art & crafts">Art & Crafts</SelectItem>
-                <SelectItem value="baby & kids">Baby & Kids</SelectItem>
+                <SelectItem value="books-media">Books & Media</SelectItem>
+                <SelectItem value="art-crafts">Art & Crafts</SelectItem>
+                <SelectItem value="baby-kids">Baby & Kids</SelectItem>
               </SelectContent>
             </Select>
 
             {/* Sort */}
-            <Select>
+            <Select value={sort} onValueChange={setSort}>
               <SelectTrigger className="w-[180px]">
                 <div className="flex items-center gap-2">
                   <SortAsc className="w-4 h-4" />
@@ -148,7 +91,7 @@ const BrowseProducts = () => {
                 </div>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="relevance">Relevance</SelectItem>
                 <SelectItem value="price-low">Price: Low to High</SelectItem>
                 <SelectItem value="price-high">Price: High to Low</SelectItem>
                 <SelectItem value="rating">Best Rating</SelectItem>
@@ -207,8 +150,8 @@ const BrowseProducts = () => {
             ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             : "space-y-4"
           }>
-            {filteredProducts.map((product, index) => (
-              <ProductCard key={index} {...product} />
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} {...product} />
             ))}
           </div>
         ) : (
